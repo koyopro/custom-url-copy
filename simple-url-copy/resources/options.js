@@ -7,20 +7,18 @@ const escapeHtml = str => {
     .replace(/'/g, '&#39;');
   return rep;
 }
-const getSettingAry = ary => {
-  if (ary == null || ary.length === 0) return DEFAULT_SETTING;
-  return ary;
-}
 const getTbodyHtml = ary => {
   const tdHtml = ary.map(val => {
     const label = escapeHtml(val[0]);
     const text = escapeHtml(val[1]);
+    const key = val[3] ? val[3] : '';
     const checked = (val[2]) ? 'checked' : '';
     const trClassName = (val[2]) ? '' : 'unchecked';
     const html = TD_HTML
       .replace(/{label}/g, label)
       .replace(/{text}/g, text)
       .replace(/{checked}/g, checked)
+      .replace(/{key}/g, key)
       .replace(/{trClassName}/g, trClassName);
     return html;
   }).join('');
@@ -39,9 +37,7 @@ const setSortable = _ => {
   });
 }
 
-chrome.storage.local.get(value => {
-  const valueData = value['simpleUrlCopy'];
-  const settingAry = getSettingAry(valueData);
+loadSettingsArray(settingAry => {
   const tbodyHtml = getTbodyHtml(settingAry);
   const tableElement = document.querySelector('#menu > table');
   tableElement.innerHTML = tbodyHtml;
@@ -80,7 +76,8 @@ document.getElementById('save').onclick = _ => {
     const label = labelElm.value;
     const text = elm.querySelector('[name="text"]').value;
     const checked = elm.querySelector('[name="enabled"]').checked;
-    return [label, text, checked];
+    const key = elm.querySelector('[name="key"]').value;
+    return [label, text, checked, key];
   }).filter(v => v);
   Swal.fire({
     title: '設定を保存します',
@@ -92,9 +89,7 @@ document.getElementById('save').onclick = _ => {
     }
   }).then(result => {
     if (!result.value) return;
-    chrome.storage.local.set({
-      'simpleUrlCopy': tableRowsAry
-    }, () => {
+    saveSettings(tableRowsAry, () => {
       setMakeButtonColor('');
       Swal.fire({
         title: '設定の保存が完了しました',
@@ -104,9 +99,7 @@ document.getElementById('save').onclick = _ => {
   });
 };
 document.getElementById('export').onclick = _ => {
-  chrome.storage.local.get(value => {
-    const valueData = value['simpleUrlCopy'];
-    const settingAry = getSettingAry(valueData);
+  loadSettingsArray(settingAry => {
     const textarea = document.createElement('textarea');
     textarea.textContent = JSON.stringify(settingAry);
     const body = document.getElementsByTagName('body')[0];
@@ -136,7 +129,7 @@ document.getElementById('import').onclick = _ => {
       try {
         const ary = JSON.parse(json);
         if (toString.call(ary) === '[object Array]') {
-          if (ary.length > 0 && ary[0].length === 3) {
+          if (ary.length > 0 && ary[0].length === 4) {
             return ary;
           } else {
             Swal.showValidationMessage('JSONの形式が異なります');
