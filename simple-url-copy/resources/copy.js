@@ -6,11 +6,19 @@ const copyUrl = (format) => {
 
 function copyToClipBoard(text)
 {
-    var input=document.createElement("textarea");
-    input.style.height=0;
-    document.body.appendChild(input);
-    input.value = text;
-    input.select();
-    document.execCommand('copy', false, null);
-    document.body.removeChild(input);
+    try {
+      navigator.clipboard.writeText(text);
+    } catch (e) {
+      if (e instanceof TypeError) {
+        var input=document.createElement("textarea");
+        input.style.height=0;
+        document.body.appendChild(input);
+        input.value = text;
+        input.select();
+        document.execCommand('copy', false, null);
+        document.body.removeChild(input);
+      } else {
+        throw e;
+      }
+    }
 }
