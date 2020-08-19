@@ -4,7 +4,7 @@ const toast = {
 
     create: function () {
       this.element = document.createElement('div');
-      this.element.classList.add('toast');
+      this.element.classList.add('custom-url-copy-toast');
       document.body.appendChild(this.element);
     },
 

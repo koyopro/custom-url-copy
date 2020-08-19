@@ -1,4 +1,4 @@
-div.toast {
+div.custom-url-copy-toast {
   position: fixed;
   top: 5px;
   left: 5px;
@@ -12,7 +12,7 @@ div.toast {
   opacity: 1;
 }
 
-div.toast.hide {
+div.custom-url-copy-toast.hide {
   transition: 0.8s;
   opacity: 0;
 }
