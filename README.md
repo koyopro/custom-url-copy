@@ -11,8 +11,7 @@ URLを手軽にコピーするためのChrome拡張です
 ![demo](assets/shortcuts.gif)
 
 ## インストール
-Chrome ウェブストア申請中
-<!-- [Custom URL Copy - Chrome ウェブストア](https://chrome.google.com/webstore/detail/custom-url-copy/dnpmjheddkippkhokcphakckomnmmmom) -->
+[Custom URL Copy - Chrome ウェブストア](https://chrome.google.com/webstore/detail/custom-url-copy/dnpmjheddkippkhokcphakckomnmmmom)
 
 ## 特徴
 - カスタマイズ性
