@@ -10,6 +10,7 @@ div.custom-url-copy-toast {
   z-index: 2147483647;
   transition: 0s;
   opacity: 1;
+  pointer-events: none;
 }
 
 div.custom-url-copy-toast.hide {
