@@ -11,7 +11,9 @@ function copyToClipBoard(text)
     } catch (e) {
       if (e instanceof TypeError) {
         var input=document.createElement("textarea");
-        input.style.height=0;
+        input.style.height=1;
+        input.style.width=1;
+        input.style.opacity=0;
         document.body.appendChild(input);
         input.value = text;
         input.select();
