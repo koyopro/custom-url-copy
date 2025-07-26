@@ -3,13 +3,13 @@
   "description": "A tool that helps you to copy url and title.",
   "author": "@koyopro",
   "version": "1.0.3",
-  "manifest_version": 2,
+  "manifest_version": 3,
   "icons": {
     "16": "icons/16.png",
     "64": "icons/64.png",
     "128": "icons/128.png"
   },
-  "browser_action": {
+  "action": {
     "default_popup": "popup.html",
     "default_icon": "icons/16.png"
   },
@@ -17,6 +17,9 @@
   "options_ui": {
     "page": "options.html",
     "open_in_tab": false
+  },
+  "background": {
+    "service_worker": "resources/background.js"
   },
   "content_scripts": [ {
      "js": [
@@ -35,9 +38,13 @@
   } ],
   "permissions": [
     "storage",
-    "activeTab",
-    "clipboardWrite"
+    "activeTab"
   ],
-  "content_security_policy": "default-src 'self'",
-  "devtools_page": "popup.html"
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
 }

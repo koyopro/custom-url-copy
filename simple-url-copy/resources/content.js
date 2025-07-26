@@ -24,8 +24,8 @@ const toast = {
 const init = () => {
   loadSettings(settings => {
     for (let setting of settings.filter(s => s.enable && s.key)) {
-      hotkeys(setting.key, (e,h) => {
-        const text = copyUrl(setting.format);
+      hotkeys(setting.key, async (e,h) => {
+        const text = await copyUrl(setting.format);
         toast.show(`Copied!: ${text}`);
       });
     }

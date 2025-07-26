@@ -1,8 +1,13 @@
-const copyText = text => {
-  let copyTextArea = document.querySelector("#copy-textarea");
-  copyTextArea.textContent = text;
-  copyTextArea.select();
-  document.execCommand('copy');
+const copyText = async text => {
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch (err) {
+    // Fallback for older browsers
+    let copyTextArea = document.querySelector("#copy-textarea");
+    copyTextArea.textContent = text;
+    copyTextArea.select();
+    document.execCommand('copy');
+  }
 }
 
 const showCopied = _ => {
@@ -11,12 +16,12 @@ const showCopied = _ => {
   setTimeout(_ => copied.classList.add("fadeout"), 300);
 }
 
-const copyUrl = menuType => {
+const copyUrl = async menuType => {
   chrome.tabs.query({
     active: true,
     currentWindow: true,
     lastFocusedWindow: true
-  }, function(tabs) {
+  }, async function(tabs) {
     // DevToolsのエラー対策
     if (tabs[0] == null) {
       document.querySelector("#DevToolsOpened").classList.remove("d-none");
@@ -24,7 +29,7 @@ const copyUrl = menuType => {
     } else {
       document.querySelector("#DevToolsOpened").classList.add("d-none");
     }
-    copyText(formatText(menuType,tabs[0].title,tabs[0].url));
+    await copyText(formatText(menuType,tabs[0].title,tabs[0].url));
     showCopied();
   })
 }
@@ -35,9 +40,9 @@ const onInit = _ => {
   });
 }
 
-const onClickCopyMenu = elm => {
+const onClickCopyMenu = async elm => {
   const menuType = elm.dataset.text;
-  copyUrl(menuType);
+  await copyUrl(menuType);
 }
 
 document.addEventListener("DOMContentLoaded", onInit);
